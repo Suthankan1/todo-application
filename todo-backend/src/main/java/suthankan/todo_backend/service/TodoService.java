@@ -17,4 +17,30 @@ public class TodoService {
     public List<Todo> getAllTodos() {
         return repo.findAll();
     }
+
+    public Todo createTodo(Todo todo) {
+        return repo.save(todo);
+    }
+
+    public Todo getTodoById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    public void deleteTodoById(Long id) {
+        repo.deleteById(id);
+    }
+
+    public Todo updateTodo(Long id, Todo todoDetails) {
+        Todo todo = repo.findById(id).orElse(null);
+        if (todo != null) {
+            todo.setTitle(todoDetails.getTitle());
+            todo.setDescription(todoDetails.getDescription());
+            todo.setCompleted(todoDetails.isCompleted());
+
+            return repo.save(todo);
+        }
+        else{
+            return null;
+        }
+    }
 }
