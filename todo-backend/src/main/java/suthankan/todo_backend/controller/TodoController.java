@@ -10,6 +10,7 @@ import suthankan.todo_backend.service.TodoService;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class TodoController {
 
@@ -64,6 +65,36 @@ public class TodoController {
         }
         else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Todo>> searchTodo(@RequestParam String keyword){
+            List<Todo> todos = service.searchTodo(keyword);
+            return new ResponseEntity<>(todos, HttpStatus.OK);
+    }
+
+    @GetMapping("/completed")
+    public ResponseEntity<List<Todo>> getCompleted(){
+        List<Todo> todos = service.findByCompleted(true);
+        return new ResponseEntity<>(todos, HttpStatus.OK);
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<List<Todo>> getPending(){
+        List<Todo> todoச் = service.findByCompleted(false);
+        return new ResponseEntity<>(todoச், HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/toggle")
+    public ResponseEntity<Todo> toggleStatus(@PathVariable Long id){
+        Todo todo = service.updateStatus(id);
+
+        if(todo != null){
+            return new ResponseEntity<>(todo, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -43,4 +43,22 @@ public class TodoService {
             return null;
         }
     }
+
+    public List<Todo> searchTodo(String keyword) {
+        return repo.serachTodo(keyword);
+    }
+
+    public List<Todo> findByCompleted(boolean completed) {
+        return repo.findByCompleted(completed);
+    }
+
+    public Todo updateStatus(Long id) {
+        Todo todo = repo.findById(id).orElse(null);
+
+        if(todo != null){
+            todo.setCompleted(!todo.isCompleted());
+            return repo.save(todo);
+        }
+        return null;
+    }
 }
